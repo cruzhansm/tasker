@@ -26,6 +26,10 @@ export default {
           target: { name: "My Tasks" },
         },
         {
+          text: "My Schedule",
+          target: { name: "My Schedule" },
+        },
+        {
           text: "About",
           target: { name: "About" },
         },

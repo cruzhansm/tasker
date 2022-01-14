@@ -1,26 +1,45 @@
 <template>
   <div class="modal">
     <div class="modal-container">
-      <form class="modal-body" @submit="createTask">
-        <span class="title">Add New Task</span>
-        <Input type="text" :width="515" placeholder="Task Title" icon="none" />
+      <form class="modal-body" @submit="execute">
+        <span class="title">{{ title }}</span>
+        <Input
+          type="text"
+          :width="515"
+          placeholder="Task Title"
+          icon="none"
+          :value="task != null ? task.title : ''"
+        />
         <Textarea
           :width="515"
           :height="150"
           :max="100"
+          :value="task != null ? text : ''"
           placeholder="Task description"
+          @update="updateText"
         ></Textarea>
         <Input
           type="text"
           :width="515"
           placeholder="Task Location"
           icon="none"
+          :value="task != null ? task.location : ''"
         />
         <div class="timepicker">
           <span class="from">FROM</span>
           <span class="until">UNTIL</span>
-          <Input type="time" :width="250" icon="none" />
-          <Input type="time" :width="250" icon="none" />
+          <Input
+            type="time"
+            :width="250"
+            icon="none"
+            :value="task != null ? convertStart : ''"
+          />
+          <Input
+            type="time"
+            :width="250"
+            icon="none"
+            :value="task != null ? convertEnd : ''"
+          />
         </div>
         <div class="actions">
           <Button
@@ -51,15 +70,33 @@ import Button from "../Button.vue";
 
 export default {
   name: "TaskModal",
+  data() {
+    return {
+      text: String,
+    };
+  },
+  props: {
+    title: String,
+    task: null,
+  },
   components: {
     Input,
     Textarea,
     Button,
   },
   methods: {
-    createTask(e) {
+    updateDescription() {
+      this.text = task.description;
+    },
+    updateText(text) {
+      this.text = text;
+    },
+    execute(e) {
       e.preventDefault();
 
+      this.task != null ? this.updateTask(e) : this.createTask(e);
+    },
+    createTask(e) {
       const data = Array.from(e.target.elements);
 
       const start = new Date(
@@ -96,11 +133,87 @@ export default {
       axios.post("/day/new-task", { task: task }).then((response) => {
         if (response.data.success) {
           alert("Task created");
-          this.$emit('updated-tasks');
+          this.$emit("updated-tasks");
           this.$emit("close-modal");
         }
       });
     },
+    updateTask(e) {
+      const data = Array.from(e.target.elements);
+
+      const start = new Date(
+        "1970-01-01T" + data[3].value + "Z"
+      ).toLocaleTimeString("en-US", {
+        timeZone: "UTC",
+        hour12: true,
+        hour: "numeric",
+        minute: "numeric",
+      });
+
+      const end = new Date(
+        "1970-01-01T" + data[4].value + "Z"
+      ).toLocaleTimeString("en-US", {
+        timeZone: "UTC",
+        hour12: true,
+        hour: "numeric",
+        minute: "numeric",
+      });
+
+      let date = this.$route.params.date;
+
+      date = date.split("-").join("/");
+
+      const task = {
+        id: this.task.id,
+        title: data[0].value,
+        description: data[1].value,
+        location: data[2].value,
+        start: start,
+        end: end,
+        date: date,
+      };
+
+      axios.post("/day/update-task", { task: task }).then((response) => {
+        if (response.data.success) {
+          alert("Task updated successfully!");
+          this.$emit("updated-tasks");
+          this.$emit("close-modal");
+        } else {
+          alert("Failed to update task. Please try again.");
+        }
+      });
+    },
+  },
+  computed: {
+    convertStart() {
+      const raw = this.task.start.slice(0, this.task.start.length - 3);
+      let time = new String();
+
+      if (this.task.start[this.task.start.length - 2] == "A") {
+        time = "0" + raw;
+      } else {
+        time = (parseInt(raw[0]) + 12).toString() + raw.slice(raw.length - 3);
+      }
+
+      return time;
+    },
+    convertEnd() {
+      const raw = this.task.end.slice(0, this.task.end.length - 3);
+      let time = new String();
+
+      if (this.task.end[this.task.end.length - 2] == "A") {
+        time = "0" + raw;
+      } else {
+        time = (parseInt(raw[0]) + 12).toString() + raw.slice(raw.length - 3);
+      }
+
+      return time;
+    },
+  },
+  created() {
+    if (this.task != null) {
+      this.text = this.task.description;
+    }
   },
 };
 </script>

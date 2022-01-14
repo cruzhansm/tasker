@@ -6,6 +6,7 @@
       :class="icon == 'none' ? 'no-icon' : ''"
       :style="getStyle"
       :placeholder="placeholder"
+      :value="value != null ? value : ''"
     />
   </div>
 </template>
@@ -18,6 +19,7 @@ export default {
     type: String,
     width: Number,
     placeholder: String,
+    value: null,
   },
   computed: {
     getStyle() {

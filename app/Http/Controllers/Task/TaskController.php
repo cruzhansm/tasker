@@ -6,8 +6,11 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Task;
 
-class TaskController extends Controller
-{
+class TaskController extends Controller {
+    public function retrieveAll() {
+        return response()->json(['tasks' => Task::all()]);
+    }
+
     public function create(Request $request) {
         $task = new Task;
 
@@ -22,18 +25,33 @@ class TaskController extends Controller
 
         return response()->json(['success' => true]);
     }
+
+    public function update(Request $request) {
+        $numrows = Task::where('id', $request->task['id'])->update([
+            'date' => $request->task['date'],
+            'title' => $request->task['title'],
+            'location' => $request->task['location'],
+            'description' => $request->task['description'],
+            'start' => $request->task['start'],
+            'end' => $request->task['end']    
+        ]);
+
+        return response()->json(['success' => $numrows > 0 ? true : false]);
+    }
     
     public function retrieveAllSpecific(Request $request) {
         $task = new Task;
 
         $task->date = $request->date;
 
-        $tasks = Task::where('date', $task->date)->get();
+        $tasks = Task::where('date', $task->date)->where('status', '!=', 'deleted')->get();
 
         return response()->json(['tasks' => $tasks]);
     }
 
-    public function retrieveAll() {
-        return response()->json(['tasks' => Task::all()]);
+    public function updateTaskStatus(Request $request) {
+        $numrows = Task::where('id', $request->id)->update(['status' => $request->status]);
+
+        return response()->json(['success' => $numrows > 0 ? true : false]);
     }
 }

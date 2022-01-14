@@ -22,11 +22,25 @@
       <div style="width: 40%"></div>
     </div>
     <div class="tasks">
-      <Task :key="task.id" v-for="task in tasks" :task="task"></Task>
+      <Task
+        :key="task.id"
+        v-for="task in tasks"
+        :task="task"
+        @task-status-update="getAllTasks"
+        @edit-task="editTask"
+      ></Task>
     </div>
     <TaskModal
+      title="Add New Task"
       v-if="addTask"
       @close-modal="addTask = false"
+      @updated-tasks="getAllTasks"
+    ></TaskModal>
+    <TaskModal
+      title="Edit Task"
+      v-if="isEditing"
+      :task="editing"
+      @close-modal="isEditing = false"
       @updated-tasks="getAllTasks"
     ></TaskModal>
   </div>
@@ -42,8 +56,10 @@ export default {
   data() {
     return {
       date: String,
-      addTask: false,
       tasks: Array,
+      editing: Object,
+      addTask: false,
+      isEditing: false,
     };
   },
   created() {
@@ -58,6 +74,11 @@ export default {
   methods: {
     addNewTask() {
       this.addTask = true;
+    },
+    editTask(task) {
+      console.log(task);
+      this.editing = task;
+      this.isEditing = true;
     },
     getAllTasks() {
       let date = this.$route.params.date;

@@ -38,7 +38,7 @@ export default {
       };
     },
     prevMonth() {
-      let remain = this.formattedDate.split("/");
+      const remain = this.formattedDate.split("/");
       const month =
         this.currentDate.month > 1
           ? parseInt(remain[0]) - 1
@@ -46,12 +46,15 @@ export default {
       const year =
         this.currentDate.month > 1 ? remain[2] : parseInt(remain[2]) - 1;
 
-      remain = remain[1] + "/" + year.toString();
-      this.formattedDate = month.toString() + "/" + remain;
+      this.formattedDate =
+        month.toString() + "/" + remain[1] + "/" + year.toString();
       this.simplifiedDate();
+
+      remain[0] = month;
+      this.taskView(remain.join("-"));
     },
     nextMonth() {
-      let remain = this.formattedDate.split("/");
+      const remain = this.formattedDate.split("/");
       const month =
         this.currentDate.month < 12
           ? parseInt(remain[0]) + 1
@@ -59,9 +62,12 @@ export default {
       const year =
         this.currentDate.month < 12 ? remain[2] : parseInt(remain[2]) + 1;
 
-      remain = remain[1] + "/" + year.toString();
-      this.formattedDate = month.toString() + "/" + remain;
+      this.formattedDate =
+        month.toString() + "/" + remain[1] + "/" + year.toString();
       this.simplifiedDate();
+
+      remain[0] = month;
+      this.taskView(remain.join("-"));
     },
     taskView(formatted) {
       this.$emit("task-view", formatted);

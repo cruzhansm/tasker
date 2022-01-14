@@ -14,18 +14,23 @@
         :height="45"
         color="var(--tph-tertiary)"
         text="MARK DONE"
+        @click="updateStatus('done')"
+        v-if="task.status != 'done'"
       ></Button>
+      <div class="done" v-else>STATUS: FINISHED</div>
       <Button
         type="button"
         :height="45"
         color="var(--tph-tertiary)"
         text="EDIT TASK"
+        @click="$emit('editTask', task)"
       ></Button>
       <Button
         type="button"
         :height="45"
         color="var(--tph-tertiary)"
         text="DELETE TASK"
+        @click="updateStatus('deleted')"
       ></Button>
     </div>
   </div>
@@ -42,6 +47,18 @@ export default {
   props: {
     task: Object,
   },
+  methods: {
+    updateStatus(status) {
+      axios
+        .post("/day/update-status", { status: status, id: this.task.id })
+        .then((response) => {
+          console.log(response.data.success);
+          if (response.data.success) {
+            this.$emit("task-status-update");
+          }
+        });
+    },
+  },
 };
 </script>
 
@@ -53,6 +70,15 @@ export default {
   min-height: 90px;
   width: 100%;
   padding: 33px;
+}
+
+.done {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 20px;
+  height: 100%;
+  width: 100%;
 }
 
 .task-info,

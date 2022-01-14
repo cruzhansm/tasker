@@ -23,6 +23,8 @@ Route::post('/signup/register', [SignupController::class, 'create']);
 Route::post('/login/auth', [LoginController::class, 'check']);
 
 // Tasks
-Route::post('/day/new-task', [TaskController::class, 'create']);
-Route::post('/day/get-tasks', [TaskController::class, 'retrieveAllSpecific']);
 Route::post('/home/all-tasks', [TaskController::class, 'retrieveAll']);
+Route::post('/day/new-task', [TaskController::class, 'create']);
+Route::post('/day/update-task', [TaskController::class, 'update']);
+Route::post('/day/get-tasks', [TaskController::class, 'retrieveAllSpecific']);
+Route::post('/day/update-status', [TaskController::class, 'updateTaskStatus']);

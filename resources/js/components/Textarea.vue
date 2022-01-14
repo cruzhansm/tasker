@@ -7,6 +7,7 @@
       :style="{ width: width + 'px', height: height + 'px' }"
       :placeholder="placeholder"
       :maxlength="max"
+      :value="value != null ? value : ''"
       @input="updateCount"
     ></textarea>
     <div class="count">
@@ -25,6 +26,7 @@ export default {
     width: Number,
     height: Number,
     placeholder: String,
+    value: null,
   },
   data() {
     return {
@@ -33,8 +35,10 @@ export default {
   },
   methods: {
     updateCount() {
-      let length = document.querySelector("#addTaskText").value.length;
+      const text = document.querySelector("#addTaskText").value;
+      const length = text.length;
       this.charCount = length;
+      this.$emit("update", text);
     },
   },
 };
