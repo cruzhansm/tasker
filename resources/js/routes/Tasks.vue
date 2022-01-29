@@ -49,7 +49,7 @@ export default {
   },
   methods: {
     getAllTasks() {
-      axios.post("/home/all-tasks").then((response) => {
+      axios.post("/mytasks/all-tasks").then((response) => {
         this.unfinished = response.data.tasks.filter(
           (task) => task.status == "pending"
         );

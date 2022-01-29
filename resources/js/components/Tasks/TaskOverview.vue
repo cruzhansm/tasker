@@ -3,6 +3,7 @@
     <span class="title">{{ title }}</span>
     <span class="location">{{ location }}</span>
     <p class="desc">{{ description }}</p>
+    <span class="status">STATUS: {{ upper }}</span>
   </div>
 </template>
 
@@ -13,6 +14,12 @@ export default {
     title: String,
     location: String,
     description: String,
+    status: String,
+  },
+  computed: {
+    upper() {
+      return this.status.toUpperCase();
+    },
   },
 };
 </script>
@@ -41,5 +48,10 @@ export default {
 .desc {
   font-size: 18px;
   margin: 0;
+}
+
+.status {
+  font-size: 12px;
+  color: var(--tph-text-secondary);
 }
 </style>

@@ -18,6 +18,10 @@ class LoginController extends Controller
         if(User::where('username', $user->username)->exists()) {
             $hashed = User::where('username', $user->username)->value('password');
             if(Hash::check($user->password, $hashed)) {
+                $uauth = User::where('username', $user->username)->first();
+
+                session(['fname' => $uauth->fname, 'lname' => $uauth->lname]);
+                
                 return response()->json([
                     'success' => true
                 ]);

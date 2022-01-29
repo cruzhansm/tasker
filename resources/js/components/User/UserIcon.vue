@@ -3,7 +3,7 @@
     <div v-if="isClicked" class="user-actions">
       <div>
         <i class="fa-solid fa-user"></i>
-        First Last Name
+        {{ name }}
       </div>
       <div class="logout" @click="logout">
         <i class="fa-solid fa-right-from-bracket"></i>
@@ -19,6 +19,7 @@ export default {
   data() {
     return {
       isClicked: false,
+      name: String,
     };
   },
   methods: {
@@ -26,8 +27,16 @@ export default {
       this.isClicked = !this.isClicked;
     },
     logout() {
-      this.$router.push({ name: "Login" });
+      axios.post("/user/logout").then(() => {
+        this.$router.push({ name: "Login" });
+      });
     },
+  },
+  created() {
+    axios.post("/user/name").then((response) => {
+      console.log(response.data);
+      this.name = response.data.name;
+    });
   },
 };
 </script>

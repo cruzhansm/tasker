@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Settings></Settings>
+    <!-- <Settings></Settings> -->
     <UserIcon></UserIcon>
   </div>
 </template>

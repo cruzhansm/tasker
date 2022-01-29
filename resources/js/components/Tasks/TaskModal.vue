@@ -14,7 +14,7 @@
           :width="515"
           :height="150"
           :max="100"
-          :value="task != null ? text : ''"
+          :value="text"
           placeholder="Task description"
           @update="updateText"
         ></Textarea>
@@ -72,7 +72,7 @@ export default {
   name: "TaskModal",
   data() {
     return {
-      text: String,
+      text: "",
     };
   },
   props: {
@@ -90,6 +90,7 @@ export default {
     },
     updateText(text) {
       this.text = text;
+      console.log(this.text);
     },
     execute(e) {
       e.preventDefault();

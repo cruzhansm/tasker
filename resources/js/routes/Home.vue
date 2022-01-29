@@ -22,6 +22,7 @@
           :title="task.title"
           :location="task.location"
           :description="task.description"
+          :status="task.status"
         ></TaskOverview>
       </div>
     </div>

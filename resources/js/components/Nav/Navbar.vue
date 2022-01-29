@@ -25,14 +25,14 @@ export default {
           text: "My Tasks",
           target: { name: "My Tasks" },
         },
-        {
-          text: "My Schedule",
-          target: { name: "My Schedule" },
-        },
-        {
-          text: "About",
-          target: { name: "About" },
-        },
+        // {
+        //   text: "My Schedule",
+        //   target: { name: "My Schedule" },
+        // },
+        // {
+        //   text: "About",
+        //   target: { name: "About" },
+        // },
       ],
     };
   },

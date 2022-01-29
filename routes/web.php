@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\SignupController;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\LogoutController;
+use App\Http\Controllers\Auth\UserController;
 use App\Http\Controllers\Task\TaskController;
 
 /*
@@ -21,9 +23,12 @@ Route::get('/{any}', 'App\Http\Controllers\SpaController@index')->where('any', '
 // Auth
 Route::post('/signup/register', [SignupController::class, 'create']);
 Route::post('/login/auth', [LoginController::class, 'check']);
+Route::post('/user/name', [UserController::class, 'retrieveName']);
+Route::post('/user/logout', [LogoutController::class, 'logout']);
 
 // Tasks
 Route::post('/home/all-tasks', [TaskController::class, 'retrieveAll']);
+Route::post('/mytasks/all-tasks', [TaskController::class, 'retrieveAllNotFinished']);
 Route::post('/day/new-task', [TaskController::class, 'create']);
 Route::post('/day/update-task', [TaskController::class, 'update']);
 Route::post('/day/get-tasks', [TaskController::class, 'retrieveAllSpecific']);

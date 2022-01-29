@@ -8,7 +8,11 @@ use App\Models\Task;
 
 class TaskController extends Controller {
     public function retrieveAll() {
-        return response()->json(['tasks' => Task::all()]);
+        return response()->json(['tasks' => Task::where('status', '!=', 'deleted')->where('status', '!=', 'done')->get()]);
+    }
+
+    public function retrieveAllNotFinished() {
+        return response()->json(['tasks' => Task::where('status', '!=', 'deleted')->get()]);
     }
 
     public function create(Request $request) {
